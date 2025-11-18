@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure File Decryptor</title>
+  <style>
+    :root {
+      --gradient-start: #2c3e50;
+      --gradient-end: #4ca1af;
+      --accent: #ffd700;
+      --btn-blue: #3498db;
+      --btn-blue-hover: #2980b9;
+      --btn-yellow: #ffc107;
+      --btn-yellow-hover: #e0a800;
+      --text-light: #eee;
+      --text-dark: #333;
+      --glass: rgba(255, 255, 255, 0.1);
+      --glass-deep: rgba(255, 255, 255, 0.15);
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+      color: var(--text-light);
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s ease;
+    }
+
+    body.light-mode {
+      background: linear-gradient(to right, #f0f0f0, #dbe9f4);
+      color: #222;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: var(--glass);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: var(--accent);
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input[type="file"], input[type="text"] {
+      background-color: #f0f0f0;
+      color: var(--text-dark);
+    }
+
+    button {
+      background-color: var(--btn-blue);
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: var(--btn-blue-hover);
+    }
+
+    .copy-btn {
+      background-color: var(--btn-yellow);
+      color: #000;
+    }
+
+    .copy-btn:hover {
+      background-color: var(--btn-yellow-hover);
+    }
+
+    .info-section {
+      background-color: var(--glass-deep);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+
+      h1, h2 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button onclick="toggleMode()" class="copy-btn">🌓 Toggle Dark/Light Mode</button>
+    <h1>🔓 Secure File Decryptor</h1>
+
+    <div class="info-section">
+      <h2>How Decryption Works</h2>
+      <p>
+        Decryption converts encrypted data back to its original form using a valid key. This platform uses AES-based Fernet decryption to ensure only the correct key can unlock your file.
+      </p>
+      <p>
+        Paste the exact key used during encryption. If the key is incorrect or the file is tampered with, decryption will fail.
+      </p>
+    </div>
+
+    <h2>Upload Encrypted File and Key</h2>
+    <form action="/decrypt" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" required />
+      <input type="text" name="key" placeholder="Paste your decryption key here" required />
+      <button type="submit">🔓 Decrypt & Download</button>
+    </form>
+
+    <button onclick="window.location.href='/'" class="copy-btn">🔐 Go to Encryptor</button>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Advance Secured Data Transfer System | Designed by Srinivas
+  </div>
+
+  <script>
+    function toggleMode() {
+      document.body.classList.toggle('light-mode');
+    }
+  </script>
+</body>
+</html>

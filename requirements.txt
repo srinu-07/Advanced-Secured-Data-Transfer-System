@@ -1,0 +1,4 @@
+Flask
+cryptography
+scikit-learn
+gunicorn

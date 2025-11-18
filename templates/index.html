@@ -1,0 +1,271 @@
+<!-- Secure File Encryptor -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure File Encryptor</title>
+  <style>
+    :root {
+      --gradient-start: #1e3c72;
+      --gradient-end: #2a5298;
+      --accent: #ffd700;
+      --btn-green: #00c9a7;
+      --btn-green-hover: #00b38f;
+      --btn-yellow: #ffc107;
+      --btn-yellow-hover: #e0a800;
+      --btn-blue: #3498db;
+      --btn-blue-hover: #2980b9;
+      --strong-bg: #28a745;
+      --weak-bg: #dc3545;
+      --text-light: #eee;
+      --text-dark: #333;
+      --glass: rgba(255, 255, 255, 0.1);
+      --glass-deep: rgba(255, 255, 255, 0.15);
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+      color: var(--text-light);
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s ease;
+    }
+
+    body.light-mode {
+      background: linear-gradient(to right, #f0f0f0, #dbe9f4);
+      color: #222;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: var(--glass);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: var(--accent);
+    }
+
+    p, li {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input[type="file"], input[type="text"] {
+      background-color: #f0f0f0;
+      color: var(--text-dark);
+    }
+
+    button {
+      background-color: var(--btn-green);
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: var(--btn-green-hover);
+    }
+
+    .copy-btn {
+      background-color: var(--btn-yellow);
+      color: #000;
+    }
+
+    .copy-btn:hover {
+      background-color: var(--btn-yellow-hover);
+    }
+
+    .nav-btn {
+      background-color: var(--btn-blue);
+      color: white;
+    }
+
+    .nav-btn:hover {
+      background-color: var(--btn-blue-hover);
+    }
+
+    .info-section {
+      background-color: var(--glass-deep);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    .info-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .info-section li {
+      margin-bottom: 10px;
+    }
+
+    #keyDisplay {
+      font-weight: bold;
+      word-break: break-word;
+      margin-top: 10px;
+    }
+
+    #strengthAlert {
+      display: none;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .strong {
+      background-color: var(--strong-bg);
+      color: white;
+    }
+
+    .weak {
+      background-color: var(--weak-bg);
+      color: white;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+
+      h1, h2 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button onclick="toggleMode()" class="copy-btn">🌓 Toggle Dark/Light Mode</button>
+    <h1>🔐 Secure File Helper</h1>
+
+    <div class="info-section">
+      <h2>What is Cryptography?</h2>
+      <p>Cryptography secures data using mathematical techniques. This platform uses AES encryption via Fernet.</p>
+
+      <h2>Why Security Matters</h2>
+      <p>Over 85% of websites are vulnerable. Encryption protects your files from unauthorized access and breaches.</p>
+
+      <h2>FAQs</h2>
+      <ul>
+        <li><strong>Q:</strong> What encryption is used?<br><strong>A:</strong> AES-128 via Fernet.</li>
+        <li><strong>Q:</strong> Is my key stored?<br><strong>A:</strong> No, it's never stored.</li>
+        <li><strong>Q:</strong> Can I decrypt elsewhere?<br><strong>A:</strong> Yes, with the correct key.</li>
+        <li><strong>Q:</strong> What if I lose the key?<br><strong>A:</strong> Decryption is impossible.</li>
+      </ul>
+    </div>
+
+    <h2>Generate Encryption Key</h2>
+    <button onclick="generateKey()">🔑 Generate Key</button>
+    <div id="keyDisplay"></div>
+    <button class="copy-btn" onclick="copyKey()">📋 Copy Key</button>
+    <div id="strengthAlert"></div>
+
+    <h2>Upload and Encrypt File</h2>
+    <form id="encryptForm" enctype="multipart/form-data">
+      <input type="file" name="file" id="fileInput" required />
+      <input type="text" name="key" id="keyInput" placeholder="Paste your encryption key here or use generated one" required />
+      <button type="submit">📥 Encrypt & Download</button>
+    </form>
+
+    <button onclick="window.location.href='/decrypt'" class="nav-btn">🔓 Go to Decryptor</button>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Advance Secured Data Transfer System | Designed by Srinivas
+  </div>
+
+  <script>
+    let currentKey = "";
+
+    function toggleMode() {
+      document.body.classList.toggle('light-mode');
+    }
+
+    async function generateKey() {
+      const response = await fetch('/generate_key');
+      const data = await response.json();
+      currentKey = data.key;
+
+      document.getElementById('keyDisplay').innerText = "Generated Key:\n" + data.key;
+
+      const alertBox = document.getElementById('strengthAlert');
+      alertBox.innerText = "Key Strength: " + data.strength;
+      alertBox.className = data.strength.toLowerCase();
+      alertBox.style.display = "block";
+
+      // Auto-fill the input box with the generated key
+      document.getElementById('keyInput').value = data.key;
+    }
+
+    function copyKey() {
+      if (!currentKey) return alert("No key to copy!");
+      navigator.clipboard.writeText(currentKey);
+      alert("Key copied to clipboard!");
+    }
+
+    document.getElementById('encryptForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData();
+      const fileInput = document.getElementById('fileInput');
+      const keyInput = document.getElementById('keyInput');
+
+      formData.append('file', fileInput.files[0]);
+      formData.append('key', keyInput.value || currentKey);
+
+      const response = await fetch('/encrypt', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        alert("Error: " + errorText);
+        return;
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileInput.files[0].name + '.enc';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+  </script>
+</body>
+</html>
